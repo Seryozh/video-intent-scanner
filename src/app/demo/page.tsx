@@ -375,7 +375,11 @@ export default function DemoPage() {
                       <div
                         key={video.videoId}
                         id={isTarget ? 'demo-target-video' : undefined}
-                        className="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden"
+                        className={`bg-slate-900 rounded-lg overflow-hidden ${
+                          isTarget && phase === 'videos'
+                            ? 'ring-2 ring-emerald-500 border border-emerald-500/40 shadow-lg shadow-emerald-500/20 animate-glow-pulse'
+                            : 'border border-slate-800'
+                        }`}
                       >
                         {/* Video row */}
                         <div className="p-4 flex items-start gap-4">
@@ -553,7 +557,7 @@ export default function DemoPage() {
               <span className="text-emerald-400 font-medium">Your channel, {DEMO_CHANNEL.videoCount} videos.</span>
             </p>
             <p className="text-sm text-slate-400">
-              Click the glowing <span className="text-emerald-400">Analyze</span> button on any video to scan its comments.
+              Click <span className="text-emerald-400">Analyze</span> on the highlighted video to scan its comments.
             </p>
           </div>
         </div>

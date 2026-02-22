@@ -55,8 +55,18 @@ export const DEMO_CHANNEL = {
   uploadsPlaylistId: 'UU7f2bEUhR5_Q334q8tOky1Q',
 };
 
-// Real top videos sorted by views (from live API)
+// Real top videos - target video first, then sorted by views (from live API)
 export const DEMO_VIDEOS: DemoVideoData[] = [
+  {
+    videoId: 'l5YQOwGbDAk',
+    title: 'Why Your Lips Are ALWAYS Dry (Dermatologist)',
+    thumbnail: 'https://i.ytimg.com/vi/l5YQOwGbDAk/hqdefault.jpg',
+    viewCount: 141343,
+    likeCount: 4093,
+    commentCount: 444,
+    publishedAt: '2024-03-12T00:00:00Z',
+    channelTitle: 'Dr. Usama Syed',
+  },
   {
     videoId: 'k3aIeABbNvY',
     title: 'Why I QUIT Skincare Videos (Dermatologist)',
@@ -127,20 +137,10 @@ export const DEMO_VIDEOS: DemoVideoData[] = [
     publishedAt: '2023-08-23T00:00:00Z',
     channelTitle: 'Dr. Usama Syed',
   },
-  {
-    videoId: 'l5YQOwGbDAk',
-    title: 'Why Your Lips Are ALWAYS Dry (Dermatologist)',
-    thumbnail: 'https://i.ytimg.com/vi/l5YQOwGbDAk/hqdefault.jpg',
-    viewCount: 141343,
-    likeCount: 4093,
-    commentCount: 444,
-    publishedAt: '2024-03-12T00:00:00Z',
-    channelTitle: 'Dr. Usama Syed',
-  },
 ];
 
-// The target video for analysis
-export const DEMO_TARGET_VIDEO = DEMO_VIDEOS[7]; // dry lips video
+// The target video for analysis (first in the list)
+export const DEMO_TARGET_VIDEO = DEMO_VIDEOS[0];
 
 // Pre-baked comments
 const DEMO_COMMENTS: DemoComment[] = [

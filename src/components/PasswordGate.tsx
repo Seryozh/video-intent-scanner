@@ -17,19 +17,6 @@ export default function PasswordGate({ children }: PasswordGateProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Check URL param first
-    const params = new URLSearchParams(window.location.search);
-    const keyParam = params.get('key');
-    if (keyParam === CORRECT_PASSWORD) {
-      sessionStorage.setItem(SESSION_KEY, 'true');
-      // Clean URL without reload
-      const url = new URL(window.location.href);
-      url.searchParams.delete('key');
-      window.history.replaceState({}, '', url.pathname);
-      setIsAuthenticated(true);
-      return;
-    }
-
     // Check sessionStorage
     const stored = sessionStorage.getItem(SESSION_KEY);
     if (stored === 'true') {
