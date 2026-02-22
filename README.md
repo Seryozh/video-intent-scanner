@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Video Intent Scanner
 
-## Getting Started
+A YouTube comment analysis tool that identifies which videos have the highest patient conversion potential for medical practices.
 
-First, run the development server:
+Built for [FutureClinic](https://futureclinic.com) to help doctors convert their YouTube audiences into patients.
+
+## How it works
+
+1. **Scan** a YouTube channel or paste a single video URL
+2. **Fetch** up to 100 comments per video (50 by relevance, 50 by recency)
+3. **Classify** every comment into 6 intent categories using AI (Gemini 3 Flash)
+4. **Score** each video with a weighted conversion score and intent density metric
+5. **Generate** a targeted pinned comment draft that addresses the specific conditions viewers are describing
+
+## Intent Categories
+
+| Category | Weight | Description |
+|----------|--------|-------------|
+| Booking Intent | x10 | Actively trying to book or contact the doctor |
+| System Frustration | x7 | Unhappy with current care, looking for alternatives |
+| Help Seeking | x5 | Describing a real condition, asking for medical advice |
+| Geographic Mention | x3 | Mentions a location (recruitment signal) |
+| Gratitude | x1 | Trusts the doctor but not yet converting |
+| General | x0 | Noise, unrelated to conversion |
+
+## Key Metrics
+
+- **Raw Score**: Sum of (category weight x count) across all categories
+- **Intent Density**: Raw score / (views in thousands). Normalizes for video size. A mid-size condition video often has 10-25x more density than a viral video
+- **Freshness Badge**: Active (comments in last 7 days), Warm (last 30 days), Cold (30+ days)
+
+## Tech Stack
+
+- Next.js 16 (App Router, Turbopack)
+- TypeScript, Tailwind CSS
+- YouTube Data API v3
+- OpenRouter API (Gemini 3 Flash)
+- Deployed on Vercel
+
+## Setup
+
+```bash
+npm install
+```
+
+Create `.env.local`:
+
+```
+YOUTUBE_API_KEY=your_key_here
+OPENROUTER_API_KEY=your_key_here
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Routes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | Description |
+|-------|-------------|
+| `/demo` | Guided tutorial walkthrough with pre-baked data (no API calls) |
+| `/` | Live tool (password-protected to prevent API credit burn) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/
+    page.tsx          # Main tool (password-gated)
+    demo/page.tsx     # Interactive tutorial demo
+    api/
+      channel/        # YouTube channel resolution
+      videos/         # Video fetching + sorting
+      comments/       # Comment fetching (relevance + time)
+      analyze/        # AI classification + scoring
+      generate-comment/ # Pinned comment generation
+      balance/        # API quota tracking
+  components/
+    VideoCard.tsx     # Video display + analysis results
+    IntentBreakdown.tsx # Stacked bar chart of categories
+    HighIntentComments.tsx # Filterable classified comment list
+    ConversionScore.tsx # Score badge
+    FreshnessBadge.tsx  # Activity indicator
+    GeoMentions.tsx   # Geographic location tags
+    PinnedCommentDraft.tsx # AI-generated pinned comment
+    PasswordGate.tsx  # Client-side access gate
+  lib/
+    youtube.ts        # YouTube API wrapper
+    ai.ts             # OpenRouter/Gemini integration
+    scoring.ts        # Score computation
+    types.ts          # TypeScript interfaces
+    url-parser.ts     # YouTube URL parsing
+    demo-data.ts      # Pre-baked data for tutorial
+```
